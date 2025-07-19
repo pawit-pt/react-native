@@ -61,6 +61,13 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="photo.fill" color={color} />,
           }}
         />
+        <Tabs.Screen
+          name="listimage"
+          options={{
+            title: 'List Image',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="photo.fill" color={color} />,
+          }}
+        />
     </Tabs>
   );
 }
