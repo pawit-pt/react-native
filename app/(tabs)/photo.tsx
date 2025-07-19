@@ -8,7 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { use, useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { styles } from '../styles/photo.styles';
-import usePermissionImages from '@/hooks/usePermissionImages.web';
+import usePermissionImages from '../../hooks/usePermissionImages.web';
 
 export default function PhotoScreen() {
 
