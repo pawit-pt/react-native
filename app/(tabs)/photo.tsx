@@ -1,14 +1,15 @@
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { Alert, TouchableOpacity, View } from 'react-native';
 import { styles } from '../styles/photo.styles';
 import usePermissionImages from '../../hooks/usePermissionImages.web';
+import React from 'react';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { HelloWave } from '@/components/HelloWave';
 
 export default function PhotoScreen() {
 
