@@ -5,73 +5,36 @@ import { ThemedView } from '@/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
-import { Alert, Linking, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-
+import { use, useState } from 'react';
+import { Alert, TouchableOpacity, View } from 'react-native';
+import { styles } from '../styles/photo.styles';
+import usePermissionImages from '@/hooks/usePermissionImages.web';
 
 export default function PhotoScreen() {
 
   const [ image, setImage ] = useState<string | null>(null);
+  const { permissionState, getPermission } = usePermissionImages();
+  
   const pickImage = async () => {
     try {
-      if (Platform.OS === 'ios') {
-        // First check current permission status
-        const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
-        console.log(ImagePicker);
-        console.log(status);
-        if (status === 'denied') {
-          // Permission was denied permanently, direct to settings
-          Alert.alert(
-            'Photo Access Required', 
-            'Photo library access was denied. Please enable it in Settings:\n\n1. Go to Settings\n2. Find this app\n3. Enable Photos access',
-            [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'Open Settings', onPress: () => Linking.openSettings() }
-            ]
-          );
+      if (!permissionState) {
+        console.log("permissionState", permissionState);
+        const hasPermission = await getPermission();
+        if (!hasPermission) {
           return;
         }
-        if (status !== 'granted') {
-          // Request permission if not granted
-          const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          
-          if (permissionResult.granted === false) {
-            if (permissionResult.canAskAgain === false) {
-              // User selected "Don't Allow" - direct to settings
-              Alert.alert(
-                'Photo Access Required', 
-                'Photo library access is required. Please enable it in Settings:\n\n1. Go to Settings\n2. Find this app\n3. Enable Photos access',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Open Settings', onPress: () => Linking.openSettings() }
-                ]
-              );
-            } else {
-              // User denied but can ask again
-              Alert.alert(
-                'Permission Required', 
-                'Permission to access photo library is required to select images.',
-                [
-                  { text: 'Cancel', style: 'cancel' },
-                  { text: 'Try Again', onPress: pickImage } // Recursively call the function
-                ]
-              );
-            }
-            return;
-          }
-          console.log('Permission granted');
-        }
       }
-  
       // Launch image library
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'], // Note: this should be ImagePicker.MediaTypeOptions.Images in newer versions
         allowsEditing: true,
-        aspect: [4, 3],
+        // aspect: [5, 5],
         quality: 1,
       });
   
       if (!result.canceled && result.assets[0]) {
+        console.log("result.assets[0].uri", result.assets[0].uri);
+        console.log("result", result);
         setImage(result.assets[0].uri);
       }
     } catch (error) {
@@ -79,15 +42,6 @@ export default function PhotoScreen() {
       Alert.alert('Error', 'An error occurred while accessing photos.');
     }
   };
-  // let result = await ImagePicker.launchImageLibraryAsync({
-  //   mediaTypes: ['images'],
-  //   allowsEditing: true,
-  //   aspect: [4, 3],
-  //   quality: 1,
-  // });
-  // if (!result.canceled && result.assets[0]) {
-  //   setImage(result.assets[0].uri);
-  // }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -120,43 +74,3 @@ export default function PhotoScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-  photoButton: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  imageContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  selectedImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-});

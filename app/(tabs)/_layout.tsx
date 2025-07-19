@@ -40,6 +40,27 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="photo"
+        options={{
+          title: 'Photo',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="photo.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="speech_to_text"
+        options={{
+          title: 'Voice',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="mic.fill" color={color} />,
+        }}
+      />
+        <Tabs.Screen
+          name="useSlipImages"
+          options={{
+            title: 'Test',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="photo.fill" color={color} />,
+          }}
+        />
     </Tabs>
   );
 }
